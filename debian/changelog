@@ -1,0 +1,5 @@
+xivo-confgend-client (1:15.03~20150210) xivo-dev; urgency=low
+
+  * Initial release.
+
+ -- Sylvain Boily <sboily@avencall.com>  Thu, 10 Feb 2015 11:50:00 -0500
