@@ -24,5 +24,5 @@ setup(
     license='GPLv3',
     packages=packages,
     scripts=['bin/xivo-confgen'],
-    data_files=[('/etc/xivo', ['etc/xivo-confgen.conf'])],
+    data_files=[('/etc/xivo', ['etc/xivo-confgend-client/config.conf'])],
 )
