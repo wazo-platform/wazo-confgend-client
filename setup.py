@@ -11,5 +11,4 @@ setup(
     url='http://www.xivo.io/',
     license='GPLv3',
     scripts=['bin/xivo-confgen'],
-    data_files=[('/etc/xivo-confgend-client', ['etc/xivo-confgend-client/config.conf'])],
 )
