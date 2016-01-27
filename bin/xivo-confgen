@@ -17,7 +17,6 @@ DEFAULT_TIMEOUT = 5
 def main():
     parsed_args = _parse_args()
     config = _read_config_file(parsed_args.config_file)
-    config['filename'] = parsed_args.filename
 
     # TODO check what happens when output is printed on stderr by asterisk #exec
     #      i.e. should we catch the exception and just exit(1) on error or should
