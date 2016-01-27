@@ -18,9 +18,6 @@ def main():
     parsed_args = _parse_args()
     config = _read_config_file(parsed_args.config_file)
 
-    # TODO check what happens when output is printed on stderr by asterisk #exec
-    #      i.e. should we catch the exception and just exit(1) on error or should
-    #      we let the exception propagate
     _get_from_confgend(parsed_args.filename, sys.stdout.buffer, config)
 
 
