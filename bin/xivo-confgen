@@ -9,7 +9,7 @@ import sys
 
 BUFSIZE = 16384
 DEFAULT_CONFIG_FILE = '/etc/xivo-confgend-client/config.conf'
-DEFAULT_HOST = 'localhost'
+DEFAULT_HOST = '127.0.0.1'
 DEFAULT_PORT = 8669
 DEFAULT_TIMEOUT = 5
 
