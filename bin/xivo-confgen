@@ -39,8 +39,7 @@ def _read_config_file(filename):
 
 
 def _get_from_confgend(filename, out, config):
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    try:
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.settimeout(config['timeout'])
         s.connect((config['host'], config['port']))
         s.send(filename.encode('utf-8'))
@@ -49,8 +48,5 @@ def _get_from_confgend(filename, out, config):
             if not data:
                 break
             out.write(data)
-    finally:
-        s.close()
-
 
 main()
