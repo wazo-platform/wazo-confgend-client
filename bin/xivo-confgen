@@ -1,84 +1,52 @@
-#!/usr/bin/python
-# -*- coding: utf8 -*-
+#!/usr/bin/python3
+# Copyright 2016 by Avencall
+# SPDX-License-Identifier: GPL-3.0+
 
-import ConfigParser
-import os.path
+import argparse
+import configparser
+import socket
 import sys
-from twisted.python             import usage
-from twisted.internet           import reactor
-from twisted.internet.protocol  import Protocol, ClientFactory
 
-
-class ConfigGetter(Protocol):
-    def connectionMade(self):
-        self.transport.write(self.factory.key)
-
-    def dataReceived(self, data):
-        sys.stdout.write(data)
-
-
-class ConfigGetterFactory(ClientFactory):
-    protocol = ConfigGetter
-
-    def __init__(self, key):
-        self.key = key
-        self.exit_status = 0
-
-    def clientConnectionFailed(self, connector, reason):
-        self.exit_status = 1
-        reactor.stop()
-
-    def clientConnectionLost(self, connector, reason):
-        reactor.stop()
-
-
-class Options(usage.Options):
-    optParameters = [
-            ['server' , 's', 'localhost', 'confgend server host/ip', str],
-            ['port'   , 'p', 5035       , 'confgend server port', int],
-            ['timeout', 't', 5          , 'connexion timeout', int],
-            ['conf'   , 'c', '/etc/xivo-confgend-client/config.conf', 'Configuration file', str],
-    ]
-
-    def parseArgs(self, confkey):
-        self['confkey'] = confkey
-
-    def getSynopsis(self):
-        return "Usage: %s [options] frontend/conffile" % os.path.basename(sys.argv[0])
+BUFSIZE = 16384
+DEFAULT_CONFIG_FILE = '/etc/xivo-confgend-client/config.conf'
+DEFAULT_HOST = '127.0.0.1'
+DEFAULT_PORT = 8669
+DEFAULT_TIMEOUT = 5
 
 
 def main():
-    o = Options()
-    try:
-        o.parseOptions()
-    except usage.UsageError:
-        print o
-        sys.exit(1)
+    parsed_args = _parse_args()
+    config = _read_config_file(parsed_args.config_file)
 
-    config = ConfigParser.RawConfigParser()
-    config.read(o['conf'])
-    for key, value in config.items('confgen'):
-        if key not in o.defaults:
-            raise Exception("Unknown '%s' key in %s configuration file" % (key, o['conf']))
-
-        # coerce value
-        if key in o._dispatch:
-            # NOTE: cannot directly use CoerceParameter.dispatch() as it affect result to opts dict
-            try:
-                value = o._dispatch[key].coerce(value)
-            except ValueError, e:
-                raise Exception("*%s* key in *%s* configuration file is invalid type" % (key, o['conf']))
-
-        # replace if not set inline
-        if o[key] == o.defaults[key]:
-            o[key] = value
-
-    factory = ConfigGetterFactory(o['confkey'])
-    reactor.connectTCP(o['server'], o['port'], factory, timeout=o['timeout'])
-    reactor.run()
-
-    sys.exit(factory.exit_status)
+    _get_from_confgend(parsed_args.filename, sys.stdout.buffer, config)
 
 
-if __name__ == '__main__':
-    main()
+def _parse_args():
+    arg_parser = argparse.ArgumentParser()
+    arg_parser.add_argument('-c', '--config-file', default=DEFAULT_CONFIG_FILE)
+    arg_parser.add_argument('filename', metavar='frontend/conffile')
+    return arg_parser.parse_args()
+
+
+def _read_config_file(filename):
+    cfg_parser = configparser.ConfigParser()
+    cfg_parser.read(filename)
+    return {
+        'host': cfg_parser.get('confgen', 'server', fallback=DEFAULT_HOST),
+        'port': cfg_parser.getint('confgen', 'port', fallback=DEFAULT_PORT),
+        'timeout': cfg_parser.getint('confgen', 'timeout', fallback=DEFAULT_TIMEOUT),
+    }
+
+
+def _get_from_confgend(filename, out, config):
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.settimeout(config['timeout'])
+        s.connect((config['host'], config['port']))
+        s.send(filename.encode('utf-8'))
+        while True:
+            data = s.recv(BUFSIZE)
+            if not data:
+                break
+            out.write(data)
+
+main()
