@@ -42,6 +42,7 @@ def _get_from_confgend(filename, out, config):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.settimeout(config['timeout'])
         s.connect((config['host'], config['port']))
+        s.settimeout(None)
         s.send(filename.encode('utf-8'))
         while True:
             data = s.recv(BUFSIZE)
