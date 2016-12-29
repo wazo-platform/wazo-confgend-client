@@ -1,12 +1,10 @@
 Source: xivo-confgend-client
 Section: python
 Priority: extra
-Maintainer: XiVO Dev Team <dev@avencall.com>
-Uploaders: XiVO Builder Team <release@xivo.io>
+Maintainer: Wazo Maintainers <dev.wazo@gmail.com>
 Build-Depends: debhelper (>= 9), dh-python, python3-all (>= 3.4), python3-setuptools
-Standards-Version: 3.9.4
+Standards-Version: 3.9.6
 X-Python3-Version: >= 3.4
-Homepage: http://www.xivo.io/
 
 Package: xivo-confgend-client
 Architecture: all
@@ -14,12 +12,12 @@ Depends: ${python3:Depends}, ${misc:Depends}
 Provides: pf-xivo-confgen
 Replaces: pf-xivo-confgen
 Conflicts: pf-xivo-confgen
-Description: XIVO telephony systems configurations generator
- XIVO is a system based on a powerful IPBX, to bring an easy to
+Description: Wazo telephony systems configurations generator
+ Wazo is a system based on a powerful IPBX, to bring an easy to
  install solution for telephony and related services.
  .
  Confgen generate asterisk/freeswitch or any other telephony system 
- configuration from a XiVO configuration
+ configuration from a Wazo configuration
  Confgen is build on a flexible architecture of frontends (targeted systems) 
  and backends (data source).
  .
