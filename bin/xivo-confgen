@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# Copyright 2016 by Avencall
+# Copyright 2016-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 import argparse
@@ -17,14 +17,21 @@ DEFAULT_TIMEOUT = 5
 def main():
     parsed_args = _parse_args()
     config = _read_config_file(parsed_args.config_file)
+    cmd = [parsed_args.filename]
+    if parsed_args.invalidate:
+        cmd.append('invalidate')
+    if parsed_args.cached:
+        cmd.append('cached')
 
-    _get_from_confgend(parsed_args.filename, sys.stdout.buffer, config)
+    _get_from_confgend(' '.join(cmd), sys.stdout.buffer, config)
 
 
 def _parse_args():
     arg_parser = argparse.ArgumentParser()
     arg_parser.add_argument('-c', '--config-file', default=DEFAULT_CONFIG_FILE)
     arg_parser.add_argument('filename', metavar='frontend/conffile')
+    arg_parser.add_argument('--cached', action='store_true')
+    arg_parser.add_argument('--invalidate', action='store_true')
     return arg_parser.parse_args()
 
 
@@ -38,12 +45,12 @@ def _read_config_file(filename):
     }
 
 
-def _get_from_confgend(filename, out, config):
+def _get_from_confgend(cmd, out, config):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.settimeout(config['timeout'])
         s.connect((config['host'], config['port']))
         s.settimeout(None)
-        s.send(filename.encode('utf-8'))
+        s.send(cmd.encode('utf-8'))
         while True:
             data = s.recv(BUFSIZE)
             if not data:
