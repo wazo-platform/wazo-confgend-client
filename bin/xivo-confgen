@@ -30,8 +30,16 @@ def _parse_args():
     arg_parser = argparse.ArgumentParser()
     arg_parser.add_argument('-c', '--config-file', default=DEFAULT_CONFIG_FILE)
     arg_parser.add_argument('filename', metavar='frontend/conffile')
-    arg_parser.add_argument('--cached', action='store_true')
-    arg_parser.add_argument('--invalidate', action='store_true')
+    arg_parser.add_argument(
+        '--cached',
+        action='store_true',
+        help='Use the cached version of the file if it exists. If there no cached version a new one will be generated',
+    )
+    arg_parser.add_argument(
+        '--invalidate',
+        action='store_true',
+        help='Invalidates the cached version of this configuration file',
+    )
     return arg_parser.parse_args()
 
 
