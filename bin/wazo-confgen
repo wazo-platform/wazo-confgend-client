@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# Copyright 2016-2018 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2016-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 import argparse
@@ -8,7 +8,7 @@ import socket
 import sys
 
 BUFSIZE = 16384
-DEFAULT_CONFIG_FILE = '/etc/xivo-confgend-client/config.conf'
+DEFAULT_CONFIG_FILE = '/etc/wazo-confgend-client/config.conf'
 DEFAULT_HOST = '127.0.0.1'
 DEFAULT_PORT = 8669
 DEFAULT_TIMEOUT = 5

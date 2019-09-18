@@ -1,7 +1,7 @@
 #!/usr/bin/make -f
 # -*- makefile -*-
 
-export PYBUILD_NAME=xivo_confgend_client
+export PYBUILD_NAME=wazo_confgend_client
 export PYBUILD_DISABLE=test
 
 %:
