@@ -1,6 +1,6 @@
-xivo-confgend-client
+wazo-confgend-client
 ====================
 
-[![Build Status](https://jenkins.wazo.community/buildStatus/icon?job=xivo-confgend-client)](https://jenkins.wazo.community/job/xivo-confgend-client)
+[![Build Status](https://jenkins.wazo.community/buildStatus/icon?job=wazo-confgend-client)](https://jenkins.wazo.community/job/wazo-confgend-client)
 
-xivo-confgend-client is a client for xivo-confgend service for generating IPBX configuration files
+wazo-confgend-client CLI tool to generate configuration file content from the content served by wazo-confgend.
