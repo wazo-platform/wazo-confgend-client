@@ -6,6 +6,7 @@ import argparse
 import configparser
 import socket
 import sys
+import collections
 
 BUFSIZE = 16384
 DEFAULT_CONFIG_FILE = '/etc/wazo-confgend-client/config.conf'
@@ -16,7 +17,13 @@ DEFAULT_TIMEOUT = 5
 
 def main():
     parsed_args = _parse_args()
-    config = _read_config_file(parsed_args.config_file)
+    file_config = _read_config_file(parsed_args.config_file)
+    cmdline_config = dict(
+        port=parsed_args.port,
+        host=parsed_args.host,
+        timeout=parsed_args.timeout
+    )
+    config = collections.ChainMap(cmdline_config, file_config)
     cmd = [parsed_args.filename]
     if parsed_args.invalidate:
         cmd.append('invalidate')
@@ -29,6 +36,9 @@ def main():
 def _parse_args():
     arg_parser = argparse.ArgumentParser()
     arg_parser.add_argument('-c', '--config-file', default=DEFAULT_CONFIG_FILE)
+    arg_parser.add_argument('-p', '--port', dest="port", type=int, default=DEFAULT_PORT)
+    arg_parser.add_argument('--host', dest="host", default=DEFAULT_HOST)
+    arg_parser.add_argument('-t', '--timeout', dest="timeout", type=int, default=DEFAULT_TIMEOUT)
     arg_parser.add_argument('filename', metavar='frontend/conffile')
     arg_parser.add_argument(
         '--cached',
