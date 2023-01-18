@@ -18,11 +18,13 @@ DEFAULT_TIMEOUT = 5
 def main():
     parsed_args = _parse_args()
     file_config = _read_config_file(parsed_args.config_file)
-    cmdline_config = dict(
-        port=parsed_args.port,
-        host=parsed_args.host,
-        timeout=parsed_args.timeout
-    )
+    cmdline_config = dict()
+    if parsed_args.port:
+        cmdline_config["port"] = parsed_args.port
+    if parsed_args.host:
+        cmdline_config["host"] = parsed_args.host
+    if parsed_args.timeout:
+        cmdline_config["timeout"] = parsed_args.timeout
     config = collections.ChainMap(cmdline_config, file_config)
     cmd = [parsed_args.filename]
     if parsed_args.invalidate:
@@ -36,9 +38,9 @@ def main():
 def _parse_args():
     arg_parser = argparse.ArgumentParser()
     arg_parser.add_argument('-c', '--config-file', default=DEFAULT_CONFIG_FILE)
-    arg_parser.add_argument('-p', '--port', dest="port", type=int, default=DEFAULT_PORT)
-    arg_parser.add_argument('--host', dest="host", default=DEFAULT_HOST)
-    arg_parser.add_argument('-t', '--timeout', dest="timeout", type=int, default=DEFAULT_TIMEOUT)
+    arg_parser.add_argument('-p', '--port', dest="port", type=int)
+    arg_parser.add_argument('--host', dest="host")
+    arg_parser.add_argument('-t', '--timeout', dest="timeout", type=int)
     arg_parser.add_argument('filename', metavar='frontend/conffile')
     arg_parser.add_argument(
         '--cached',
