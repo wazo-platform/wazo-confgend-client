@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright 2016-2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2016-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 import argparse
@@ -45,7 +45,10 @@ def _parse_args():
     arg_parser.add_argument(
         '--cached',
         action='store_true',
-        help='Use the cached version of the file if it exists. If there no cached version a new one will be generated',
+        help=(
+            'Use the cached version of the file if it exists. '
+            'If there no cached version a new one will be generated'
+        ),
     )
     arg_parser.add_argument(
         '--invalidate',
@@ -76,5 +79,6 @@ def _get_from_confgend(cmd, out, config):
             if not data:
                 break
             out.write(data)
+
 
 main()
