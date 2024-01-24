@@ -1,6 +1,6 @@
 Source: wazo-confgend-client
 Section: python
-Priority: extra
+Priority: optional
 Maintainer: Wazo Maintainers <dev@wazo.community>
 Build-Depends: debhelper (>= 9), dh-python, python3-all, python3-setuptools
 Standards-Version: 3.9.6
@@ -9,9 +9,6 @@ X-Python3-Version: >= 3.9
 Package: wazo-confgend-client
 Architecture: all
 Depends: ${python3:Depends}, ${misc:Depends}
-Provides: xivo-confgend-client
-Replaces: xivo-confgend-client
-Conflicts: xivo-confgend-client
 Description: Wazo telephony systems configurations generator
  Wazo is a system based on a powerful IPBX, to bring an easy to
  install solution for telephony and related services.
